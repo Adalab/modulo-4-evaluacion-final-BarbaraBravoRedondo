@@ -240,3 +240,5 @@ function authenticateToken(req, res, next) {
 server.get('/ruta-protegida', authenticateToken, (req, res) => {
   res.json({ success: true, message: 'Access permitted' });
 });
+const staticServerPathWeb = './web/dist/';
+server.use(express.static(staticServerPathWeb));
