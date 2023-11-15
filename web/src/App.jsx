@@ -44,7 +44,7 @@ const App = () => {
     };
 
     fetchData();
-  }, []); // Add missing closing bracket for useEffect dependencies array
+  }, []); 
 
   return (
     <div className="container">
