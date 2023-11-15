@@ -4,6 +4,8 @@ const mysql = require('mysql2/promise');
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const swaggerUi=require("swagger-ui-express")
+const swaggerDocument=require("./swagger.json")
 
 // create and config server
 const server = express();
@@ -11,7 +13,7 @@ server.use(cors());
 server.use(express.json());
 
 // init express aplication
-const serverPort = 4000;
+const serverPort = process.env.PORT || 4000;
 server.listen(serverPort, () => {
   console.log(`Server listening at http://localhost:${serverPort}`);
 });
@@ -35,7 +37,7 @@ async function getConnection() {
 
   return connection;
 }
-
+server.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 //ALL DREAMS
 server.get('/dreams', async (req, res) => {
   const connection = await getConnection();
@@ -47,7 +49,7 @@ server.get('/dreams', async (req, res) => {
 });
 
 //NEW ENTRY
-server.post('/dreams', async (req, res) => {
+server.post('/newDream', async (req, res) => {
   try {
     const { user_id, description, emotional_color, categories } = req.body;
 
@@ -74,7 +76,7 @@ server.post('/dreams', async (req, res) => {
   }
 });
 //UPDATE
-server.put('/dreams/:id', async (req, res) => {
+server.put('/updateDream/:id', async (req, res) => {
   try {
     const connection = await getConnection();
     const dreamsId = req.params.id;
@@ -108,7 +110,7 @@ server.put('/dreams/:id', async (req, res) => {
   }
 });
 //DELETE DREAM
-server.delete('/dreams/:id', async (req, res) => {
+server.delete('/deleteDream/:id', async (req, res) => {
   try {
     const connection = await getConnection();
     const dreamsId = req.params.id;
@@ -131,22 +133,36 @@ server.delete('/dreams/:id', async (req, res) => {
 
 
 //REGISTER
+// REGISTER
 server.post('/sign-up', async (req, res) => {
-  const password = req.body.pass;
-  const email = req.body.email;
-  const username = req.body.username;
-  console.log(req.body);
-  const passwordHashed = await bcrypt.hash(password, 10);
-  const sql = 'INSERT INTO Users (username, email, password) values (?,?,?) ';
-  const connection = await getConnection();
-  const [results] = await connection.query(sql, [
-    username,
-    email,
-    passwordHashed,
-  ]);
-  console.log(results);
-  connection.end();
-  res.json({ success: true, id: results.insertId });
+  try {
+    const username = req.body.username;
+    const email = req.body.email;
+    const password = req.body.password;
+
+    // Check if the username is provided and not empty
+    if (!username) {
+      return res.status(400).json({
+        success: false,
+        message: 'Username is required.',
+      });
+    }
+
+    const passwordHashed = await bcrypt.hash(password, 10);
+    const sql = 'INSERT INTO Users (username, email, password) values (?,?,?) ';
+    const connection = await getConnection();
+    const [results] = await connection.query(sql, [username, email, passwordHashed]);
+
+    console.log(results);
+    connection.end();
+    res.json({ success: true, id: results.insertId });
+  } catch (error) {
+    console.error('Error during sign-up:', error);
+    res.json({
+      success: false,
+      message: 'Check all fields are filled and try again.',
+    });
+  }
 });
 
 //TOKEN

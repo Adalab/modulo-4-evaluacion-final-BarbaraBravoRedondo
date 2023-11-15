@@ -1,0 +1,147 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Sueños API",
+      "version": "1.0.0",
+      "description": "API para la gestión de usuarios y sueños"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:5000",
+        "description": "Servidor de desarrollo"
+      }
+    ],
+    "paths": {
+      "/dreams": {
+        "get": {
+          "summary": "Lista todos los sueños",
+          "responses": {
+            "200": {
+              "description": "Operación exitosa",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "success": {
+                        "type": "boolean"
+                      },
+                      "dreams": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/dreams"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/newDream": {
+        "post": {
+          "summary": "Crea un nuevo sueño",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/newDream"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Proyecto creado exitosamente"
+            }
+          }
+        }
+      },
+      "/updateDream/{id}": {
+        "post": {
+          "summary": "Modifica un sueño",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/dreams/:id"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Proyecto creado exitosamente"
+            }
+          }
+        }
+      },
+      "/deleteDream/{id}": {
+        "get": {
+          "summary": "Elimina un proyecto específico",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Operación exitosa"
+            },
+            "404": {
+              "description": "Proyecto no encontrado"
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "Dreams": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+          "description":{
+            "type": "string"
+          },
+          "emotional_color":{
+            "type": "string"
+          },
+          "categories":{
+            "type": "string"
+          }
+          }
+        },
+        "New Dream": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+          "description":{
+            "type": "string"
+          },
+          "emotional_color":{
+            "type": "string"
+          },
+          "categories":{
+            "type": "string"
+          }
+          
+            
+          }
+        }
+      }
+    }
+  }
