@@ -1,6 +1,7 @@
 // services/user.jsx
+
 const sendLoginToApi = data => {
-    fetch('//localhost:3306/login', {
+    fetch('//localhost:5000/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -15,7 +16,7 @@ const sendLoginToApi = data => {
   
   const sendSignUpToApi = data => {
     console.log('Se están enviando datos al signup:', data);
-    return fetch('//localhost:3306/sign-up', {
+    return fetch('//localhost:5000/sign-up', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

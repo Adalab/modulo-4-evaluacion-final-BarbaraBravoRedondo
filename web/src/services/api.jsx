@@ -2,7 +2,7 @@
 const getDreamsFromApi = () => {
   console.log('Se están pidiendo las películas de la app');
   
-  return fetch(`//localhost:3306/dreams`)
+  return fetch(`//localhost:5000/dreams`)
     .then((response) => response.json())
     .then((data) => {
       return data;
